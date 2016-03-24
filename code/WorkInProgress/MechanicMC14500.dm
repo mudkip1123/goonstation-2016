@@ -42,7 +42,7 @@ var/list/hex_digit_values = list("0" = 0, "1" = 1, "2" = 2, "3" = 3, "4" = 4, "5
 	//var/tmp/list/sourceCode = list()
 
 	var/dbgmode = 0
-
+	
 	New()
 		..()
 		mechanics.addInput("input 1", "fire1")
@@ -52,6 +52,7 @@ var/list/hex_digit_values = list("0" = 0, "1" = 1, "2" = 2, "3" = 3, "4" = 4, "5
 		mechanics.addInput("input 5", "fire5")
 		mechanics.addInput("input 6", "fire6")
 		mechanics.addInput("input 7", "fire7")
+		verbs -= /obj/item/mechanics/verb/setvalue
 		//mechanics.addInput("input 8", "fire8")
 
 
@@ -72,7 +73,8 @@ var/list/hex_digit_values = list("0" = 0, "1" = 1, "2" = 2, "3" = 3, "4" = 4, "5
 				if (!running || !level)
 					break
 
-				program_counter %= .
+				if (program_counter < 0 || program_counter >= .)
+					program_counter = 0
 
 				switch (interpret_instruction(copytext(ROM, program_counter+1, program_counter+2), copytext(ROM, program_counter+2, program_counter+3)))
 					if (-1)
@@ -162,6 +164,7 @@ function update_mem_lights(mem)
 		set src in view(1)
 		set name = "\[Set ROM\]"
 		set desc = "Configure the ROM by thinking really hard at the floating-gate transistors inside.  Really, really hard."
+		set category = "Local"
 		if (!istype(usr, /mob/living))
 			return
 		if (usr.stat)
@@ -177,7 +180,7 @@ function update_mem_lights(mem)
 			boutput(usr, "<span style=\"color:red\">[MECHFAILSTRING]</span>")
 			return
 
-		. = uppertext(copytext(ckey(.), 1, 65))
+		. = uppertext(copytext(ckey(.), 1, MAX_ROM_SIZE + 1))
 		if (length(.)%2 || !ishex(.))
 			boutput(usr, "<span style=\"color:red\">Invalid ROM values.  Great job, knucklehead!!</span>")
 
@@ -187,6 +190,7 @@ function update_mem_lights(mem)
 		set src in view(1)
 		set name = "\[Toggle Active\]"
 		set desc = "Toggle whether this is on or not.  Doing stuff."
+		set category = "Local"
 
 		if (!istype(usr, /mob/living))
 			return
@@ -200,6 +204,7 @@ function update_mem_lights(mem)
 		IEN = 0
 		OEN = 0
 		RR = 0
+		program_counter = 0
 		src.ioPins = 1 //All zero except the !RR section.
 		src.icon_state = "genericsmall[src.running ? 1 : 0]"
 
@@ -326,11 +331,11 @@ function update_mem_lights(mem)
 					program_counter += (4 * (. - 7)) - 2
 
 				else
-					program_counter -= (4 * (. + 1)) - 2
+					program_counter -= (4 * (. + 1)) + 2
 
-				. = length(ROM)
-				if (program_counter < 0)
-					program_counter = . + (program_counter % .)
+				//. = length(ROM)
+				//if (program_counter < 0)
+				//	program_counter = . + (program_counter % .)
 
 				return 0
 
