@@ -39,7 +39,7 @@ THAT STUPID GAME KIT
 		dat += "<tr>"
 
 		for (var/x = 1 to 8)
-			var/tilecolor = (y + x) % 2 ? "#ffffff" : "#999999"
+			var/tilecolor = (y + x) % 2 ? "#999999" : "#ffffff"
 			var/piece = copytext(src.board_stat, ((y - 1) * 8 + x) * 2 - 1, ((y - 1) * 8 + x) * 2 + 1)
 
 			dat += "<td>"
