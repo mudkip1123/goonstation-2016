@@ -550,11 +550,23 @@
 	if (!target || !message)
 		return
 
-	if (usr:paralysis || usr:stunned || usr:weakened || usr:stat)
+	if (usr.paralysis || usr.stunned || usr.weakened || usr.stat)
 		return
 
 	if (istype(src.host_program))
 		src.host_program.pda_message(pdasay_autocomplete[target], target, message)
+
+
+/obj/item/device/pda2/verb/eject()
+	set name = "Eject ID"
+	set desc = "Eject the currently loaded ID card from this PDA."
+	set src in usr
+
+	if (usr.paralysis || usr.stunned || usr.weakened || usr.stat)
+		return
+
+	eject_id_card(usr)
+	src.updateSelfDialog()
 
 /obj/item/device/pda2
 
