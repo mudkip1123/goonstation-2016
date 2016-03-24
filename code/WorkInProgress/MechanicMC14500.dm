@@ -42,7 +42,7 @@ var/list/hex_digit_values = list("0" = 0, "1" = 1, "2" = 2, "3" = 3, "4" = 4, "5
 	//var/tmp/list/sourceCode = list()
 
 	var/dbgmode = 0
-	
+
 	New()
 		..()
 		mechanics.addInput("input 1", "fire1")
@@ -332,10 +332,6 @@ function update_mem_lights(mem)
 
 				else
 					program_counter -= (4 * (. + 1)) + 2
-
-				//. = length(ROM)
-				//if (program_counter < 0)
-				//	program_counter = . + (program_counter % .)
 
 				return 0
 
