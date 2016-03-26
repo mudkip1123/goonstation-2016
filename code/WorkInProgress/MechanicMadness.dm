@@ -2401,7 +2401,7 @@ var/list/mechanics_telepads = new/list()
 /obj/item/mechanics/instrumentPlayer //Grayshift's musical madness
 	name = "Instrument Player"
 	desc = ""
-	icon_state = "comp_synth"
+	icon_state = "comp_instrument"
 	density = 0
 	var/obj/item/instrument = null
 	var/pitchUnlocked = 0 // varedit this to 1 to permit really goofy pitch values!
@@ -2424,9 +2424,15 @@ var/list/mechanics_telepads = new/list()
 		spawn(delay) ready = 1
 		var/signum = text2num(input.signal)
 		if (signum && ((signum >= 0.4 && signum <= 2) || (signum <= -0.4 && signum >= -2) || pitchUnlocked))
+			flick("comp_instrument1", src)
 			playsound(src.loc, sounds, volume, 0, 0, signum)
 		else
+			flick("comp_instrument1", src)
 			playsound(src.loc, sounds, volume, 1)
+			return
+
+	updateIcon()
+		icon_state = "comp_instrument"
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
